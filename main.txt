@@ -7,8 +7,8 @@ local UserInputService = game:GetService("UserInputService")
 local noclipEnabled = false
 local infJumpEnabled = false
 local exploring = false
-local stepSize = 75
-local travelSpeed = 750
+local stepSize = 150
+local travelSpeed = 1500
 local RunService = game:GetService("RunService")
 local char = player.Character or player.CharacterAdded:Wait()
 local hrp = char:WaitForChild("HumanoidRootPart")
@@ -35,6 +35,14 @@ frameuicorner.Parent = mainframe
 local frameuiaspectratioconstraint = Instance.new("UIAspectRatioConstraint")
 frameuiaspectratioconstraint.AspectRatio = 1.25
 frameuiaspectratioconstraint.Parent = mainframe
+
+local mainscrollingframe = Instance.new("ScrollingFrame")
+mainscrollingframe.Position = UDim2.new(0.5, 0, 0.5, 0)
+mainscrollingframe.AnchorPoint = Vector2.new(0.5, 0.5)
+mainscrollingframe.Size = UDim2.new(1, 0,1, 0)
+mainscrollingframe.BorderSizePixel = 0
+mainscrollingframe.BackgroundTransparency = 1
+mainscrollingframe.Parent = mainframe
 
 local frameuistroke = Instance.new("UIStroke")
 frameuistroke.Color = Color3.fromRGB(36, 36, 36)
@@ -63,38 +71,74 @@ minimizebutton.TextScaled = true
 minimizebutton.ZIndex = 5
 minimizebutton.Parent = mainframe
 
-local openpanelbutton = Instance.new("TextButton")
-openpanelbutton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+local openpanelbutton = Instance.new("ImageButton")
 --openpanelbutton.TextColor3 = Color3.fromRGB(182, 0, 0)
 openpanelbutton.AnchorPoint = Vector2.new(0.5, 0.5)
 openpanelbutton.BorderSizePixel = 0
-openpanelbutton.Position = UDim2.new(0.5, 0,0.1, 0)
+openpanelbutton.BackgroundTransparency = 1
+openpanelbutton.Image = "rbxassetid://96583070580981"
+openpanelbutton.Position = UDim2.new(0.5, 0,0.111, 0)
 --openpanelbutton.Text = "-"
-openpanelbutton.Size = UDim2.new(0, 200,0, 50)
-openpanelbutton.TextScaled = true
+openpanelbutton.Size = UDim2.new(0, 125,0, 125)
 openpanelbutton.ZIndex = 5
 openpanelbutton.Visible = false
 openpanelbutton.Parent = maingui
 
-local buttonframe = Instance.new("Frame")
+local moveopenpanelbutton = Instance.new("ImageButton")
+--openpanelbutton.TextColor3 = Color3.fromRGB(182, 0, 0)
+moveopenpanelbutton.AnchorPoint = Vector2.new(0.5, 0.5)
+moveopenpanelbutton.BorderSizePixel = 0
+moveopenpanelbutton.BackgroundTransparency = 1
+moveopenpanelbutton.Image = "rbxassetid://92498186960996"
+moveopenpanelbutton.Position = UDim2.new(0.9, 45,0.5, 0)
+--openpanelbutton.Text = "-"
+moveopenpanelbutton.Size = UDim2.new(0, 65,0, 65)
+moveopenpanelbutton.ZIndex = 7
+moveopenpanelbutton.Parent = openpanelbutton
+
+local openpaneltext = Instance.new("TextLabel")
+openpaneltext.AnchorPoint = Vector2.new(0.5, 0.5)
+openpaneltext.Position = UDim2.new(0.5, 0,0.5, 0)
+openpaneltext.Rotation = 25
+openpaneltext.Size = UDim2.new(1, 0,1, 0)
+openpaneltext.TextTransparency = 0.5
+openpaneltext.BackgroundTransparency = 1
+openpaneltext.BorderSizePixel = 0
+openpaneltext.TextScaled = false
+openpaneltext.TextSize = 50
+openpaneltext.Text = " Open "
+openpaneltext.TextXAlignment = Enum.TextXAlignment.Right
+openpaneltext.Font = Enum.Font.FredokaOne
+openpaneltext.TextColor3 = Color3.fromRGB(255, 255, 255)
+openpaneltext.ZIndex = 6
+openpaneltext.Parent = openpanelbutton
+
+local openpaneltextuistroke = Instance.new("UIStroke")
+openpaneltextuistroke.Color = Color3.fromRGB(0, 0, 0)
+openpaneltextuistroke.Thickness = 5
+openpaneltextuistroke.Transparency = 0.5
+openpaneltextuistroke.Parent = openpaneltext
+
+--[[local buttonframe = Instance.new("Frame")
 buttonframe.Position = UDim2.new(0.5, 0, 0.5, 0)
 buttonframe.AnchorPoint = Vector2.new(0.5, 0.5)
 buttonframe.Size = UDim2.new(1, 0,1, 0)
 buttonframe.BorderSizePixel = 0
 buttonframe.BackgroundTransparency = 1
 buttonframe.Parent = mainframe
+]]
 
 local buttonframuigridlayout = Instance.new("UIGridLayout")
 buttonframuigridlayout.CellPadding = UDim2.new(0, 35,0, 25)
 buttonframuigridlayout.CellSize = UDim2.new(0, 125,0, 125)
-buttonframuigridlayout.Parent = buttonframe
+buttonframuigridlayout.Parent = mainscrollingframe
 
 local buttomframeuipadding = Instance.new("UIPadding")
 buttomframeuipadding.PaddingTop = UDim.new(0, 65)
 buttomframeuipadding.PaddingBottom = UDim.new(0, 50)
 buttomframeuipadding.PaddingLeft = UDim.new(0, 25)
 buttomframeuipadding.PaddingRight = UDim.new(0, 25)
-buttomframeuipadding.Parent = buttonframe
+buttomframeuipadding.Parent = mainscrollingframe
 
 local title = Instance.new("TextLabel")
 title.Position = UDim2.new(0.4, 25,0, 25)
@@ -109,34 +153,61 @@ title.TextScaled = true
 title.Parent = mainframe
 
 local noclipbutton = Instance.new("TextButton")
+noclipbutton.Text = "Noclip: OFF"
 noclipbutton.BorderSizePixel = 0
 noclipbutton.LayoutOrder = 1
-noclipbutton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-noclipbutton.Parent = buttonframe
+noclipbutton.TextScaled = true
+noclipbutton.TextColor3 = Color3.fromRGB(255, 255, 255)
+noclipbutton.BackgroundColor3 = Color3.fromRGB(61, 61, 61)
+noclipbutton.Font = Enum.Font.FredokaOne
+noclipbutton.Parent = mainscrollingframe
 
 local infjumpbutton = Instance.new("TextButton")
+infjumpbutton.Text = "InfJump: OFF"
 infjumpbutton.BorderSizePixel = 0
 infjumpbutton.LayoutOrder = 2
-infjumpbutton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-infjumpbutton.Parent = buttonframe
+infjumpbutton.TextColor3 = Color3.fromRGB(255, 255, 255)
+infjumpbutton.TextScaled = true
+infjumpbutton.Font = Enum.Font.FredokaOne
+infjumpbutton.BackgroundColor3 = Color3.fromRGB(61, 61, 61)
+infjumpbutton.Parent = mainscrollingframe
 
 local explorbutton = Instance.new("TextButton")
+explorbutton.Text = "Explor The Whole Map"
 explorbutton.BorderSizePixel = 0
+explorbutton.Font = Enum.Font.FredokaOne
+explorbutton.TextScaled = true
+explorbutton.TextColor3 = Color3.fromRGB(255, 255, 255)
 explorbutton.LayoutOrder = 3
-explorbutton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-explorbutton.Parent = buttonframe
+explorbutton.BackgroundColor3 = Color3.fromRGB(61, 61, 61)
+explorbutton.Parent = mainscrollingframe
 
 local titleuistroke = Instance.new("UIStroke")
 titleuistroke.Color = Color3.fromRGB(0, 0, 0)
 titleuistroke.Thickness = 5
 titleuistroke.Parent = title
 
+local button4uistroke = Instance.new("UIStroke")
+button4uistroke.Color = Color3.fromRGB(0, 0, 0)
+button4uistroke.Thickness = 5
+button4uistroke.Parent = noclipbutton
+
+local button5uistroke = Instance.new("UIStroke")
+button5uistroke.Color = Color3.fromRGB(0, 0, 0)
+button5uistroke.Thickness = 5
+button5uistroke.Parent = infjumpbutton
+
+local button6uistroke = Instance.new("UIStroke")
+button6uistroke.Color = Color3.fromRGB(0, 0, 0)
+button6uistroke.Thickness = 5
+button6uistroke.Parent = explorbutton
+
 local framebar = Instance.new("Frame")
 framebar.BackgroundTransparency = 1
 framebar.BorderSizePixel = 0
 framebar.Size = UDim2.new(1, 0,0, 50)
 framebar.AnchorPoint = Vector2.new(0.5, 0.5)
-framebar.Position = UDim2.new(0.5, 0,0, 0)
+framebar.Position = UDim2.new(0.5, 0,0, 25)
 framebar.Parent = mainframe
 
 local buttonuicorner = Instance.new("UICorner")
@@ -148,21 +219,43 @@ button2uicorner.Parent = minimizebutton
 local button3uicorner = Instance.new("UICorner")
 button3uicorner.Parent = openpanelbutton
 
+local button4uicorner = Instance.new("UICorner")
+button4uicorner.Parent = noclipbutton
+
+local button5uicorner = Instance.new("UICorner")
+button5uicorner.Parent = infjumpbutton
+
+local button6uicorner = Instance.new("UICorner")
+button6uicorner.Parent = explorbutton
+
+local button4uistroke = Instance.new("UIStroke")
+button4uistroke.Color = Color3.fromRGB(36, 36, 36)
+button4uistroke.Thickness = 8
+button4uistroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+button4uistroke.Parent = noclipbutton
+
+local button5uistroke = Instance.new("UIStroke")
+button5uistroke.Color = Color3.fromRGB(36, 36, 36)
+button5uistroke.Thickness = 8
+button5uistroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+button5uistroke.Parent = infjumpbutton
+
+local button6uistroke = Instance.new("UIStroke")
+button6uistroke.Color = Color3.fromRGB(36, 36, 36)
+button6uistroke.Thickness = 8
+button6uistroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+button6uistroke.Parent = explorbutton
+
 local buttonuiaspectratioconstraint = Instance.new("UIAspectRatioConstraint")
 buttonuiaspectratioconstraint.AspectRatio = 1
 buttonuiaspectratioconstraint.Parent = exitbutton
 
---[[local mainscrollingframe = Instance.new("ScrollingFrame")
-mainscrollingframe.Position = UDim2.new(0.5, 0, 0.5, 0)
-mainscrollingframe.AnchorPoint = Vector2.new(0.5, 0.5)
-mainscrollingframe.Size = UDim2.new(1, 0,1, 0)
-mainscrollingframe.BorderSizePixel = 0
-mainscrollingframe.BackgroundTransparency = 1
-mainscrollingframe.Parent = mainframe
-]]
 
 exitbutton.MouseButton1Click:Connect(function()
 	maingui:Destroy()
+	noclipEnabled = false
+	infJumpEnabled = false
+	exploring = false
 end)
 
 minimizebutton.MouseButton1Click:Connect(function()
@@ -198,12 +291,20 @@ infjumpbutton.MouseButton1Click:Connect(function()
 	infjumpbutton.Text = infJumpEnabled and "InfJump: ON" or "InfJump: OFF"
 end)
 
+local alwaysNoCollide = {
+	["HumanoidRootPart"] = true,
+	["Right Leg"] = true,
+	["Right Arm"] = true,
+	["Left Leg"] = true,
+	["Left Arm"] = true,
+}
+
 RunService.Stepped:Connect(function()
 	if player.Character then
 		for _, part in pairs(player.Character:GetDescendants()) do
 			if part:IsA("BasePart") then
-				if part.Name == "HumanoidRootPart" then
-					part.CanCollide = false -- always off
+				if alwaysNoCollide[part.Name] then
+					part.CanCollide = false
 				else
 					part.CanCollide = not noclipEnabled
 				end
@@ -306,9 +407,45 @@ local function exploreMap()
 	elseif mainfire and mainfire:IsA("Model") then
 		local firePos = mainfire:GetPivot().Position
 		hrp.CFrame = CFrame.new(firePos + Vector3.new(0, 50, 0))
-	else
-		warn("Mainfire not found in Map.Campground")
 	end
 end
 
 explorbutton.MouseButton1Click:Connect(exploreMap)
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local function update2(input)
+	local delta = input.Position - dragStart
+	openpanelbutton.Position = UDim2.new(
+		startPos.X.Scale,
+		startPos.X.Offset + delta.X,
+		startPos.Y.Scale,
+		startPos.Y.Offset + delta.Y
+	)
+end
+
+moveopenpanelbutton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging2 = true
+		dragStart = input.Position
+		startPos = openpanelbutton.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging2 = false
+			end
+		end)
+	end
+end)
+
+moveopenpanelbutton.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging2 and input == dragInput then
+		update2(input)
+	end
+end)
