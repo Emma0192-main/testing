@@ -1,0 +1,314 @@
+-- Made by Emma -- Discord -- emma090536
+local player = game.Players.LocalPlayer
+local v5 = require(player.PlayerScripts.Client);
+local mouse = player:GetMouse()
+local character = player.Character or player.CharacterAdded:Wait()
+local UserInputService = game:GetService("UserInputService")
+local noclipEnabled = false
+local infJumpEnabled = false
+local exploring = false
+local stepSize = 75
+local travelSpeed = 750
+local RunService = game:GetService("RunService")
+local char = player.Character or player.CharacterAdded:Wait()
+local hrp = char:WaitForChild("HumanoidRootPart")
+
+wait(3)
+
+local maingui = Instance.new("ScreenGui")
+maingui.Name = "Emma's Cheat Panel"
+maingui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local mainframe = Instance.new("Frame")
+maingui.Enabled = true
+mainframe.Name = "Main Frame"
+mainframe.BackgroundColor3 = Color3.fromRGB(61, 61, 61)
+mainframe.BorderSizePixel = 0
+mainframe.Position = UDim2.new(0.5, 0, 0.5, 0)
+mainframe.AnchorPoint = Vector2.new(0.5, 0.5)
+mainframe.Size = UDim2.new(0, 500, 0, 500)
+mainframe.Parent = maingui
+
+local frameuicorner = Instance.new("UICorner")
+frameuicorner.Parent = mainframe
+
+local frameuiaspectratioconstraint = Instance.new("UIAspectRatioConstraint")
+frameuiaspectratioconstraint.AspectRatio = 1.25
+frameuiaspectratioconstraint.Parent = mainframe
+
+local frameuistroke = Instance.new("UIStroke")
+frameuistroke.Color = Color3.fromRGB(36, 36, 36)
+frameuistroke.Thickness = 7
+frameuistroke.Parent = mainframe
+
+local exitbutton = Instance.new("TextButton")
+exitbutton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+exitbutton.TextColor3 = Color3.fromRGB(182, 0, 0)
+exitbutton.AnchorPoint = Vector2.new(0.5, 0.5)
+exitbutton.Position = UDim2.new(1, 0,0, 0)
+exitbutton.Text = "X"
+exitbutton.Size = UDim2.new(0, 65,0, 65)
+exitbutton.TextScaled = true
+exitbutton.ZIndex = 5
+exitbutton.Parent = mainframe
+
+local minimizebutton = Instance.new("TextButton")
+minimizebutton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+minimizebutton.TextColor3 = Color3.fromRGB(182, 0, 0)
+minimizebutton.AnchorPoint = Vector2.new(0.5, 0.5)
+minimizebutton.Position = UDim2.new(1, 0,0.2, 0)
+minimizebutton.Text = "-"
+minimizebutton.Size = UDim2.new(0, 65,0, 65)
+minimizebutton.TextScaled = true
+minimizebutton.ZIndex = 5
+minimizebutton.Parent = mainframe
+
+local openpanelbutton = Instance.new("TextButton")
+openpanelbutton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+--openpanelbutton.TextColor3 = Color3.fromRGB(182, 0, 0)
+openpanelbutton.AnchorPoint = Vector2.new(0.5, 0.5)
+openpanelbutton.BorderSizePixel = 0
+openpanelbutton.Position = UDim2.new(0.5, 0,0.1, 0)
+--openpanelbutton.Text = "-"
+openpanelbutton.Size = UDim2.new(0, 200,0, 50)
+openpanelbutton.TextScaled = true
+openpanelbutton.ZIndex = 5
+openpanelbutton.Visible = false
+openpanelbutton.Parent = maingui
+
+local buttonframe = Instance.new("Frame")
+buttonframe.Position = UDim2.new(0.5, 0, 0.5, 0)
+buttonframe.AnchorPoint = Vector2.new(0.5, 0.5)
+buttonframe.Size = UDim2.new(1, 0,1, 0)
+buttonframe.BorderSizePixel = 0
+buttonframe.BackgroundTransparency = 1
+buttonframe.Parent = mainframe
+
+local buttonframuigridlayout = Instance.new("UIGridLayout")
+buttonframuigridlayout.CellPadding = UDim2.new(0, 35,0, 25)
+buttonframuigridlayout.CellSize = UDim2.new(0, 125,0, 125)
+buttonframuigridlayout.Parent = buttonframe
+
+local buttomframeuipadding = Instance.new("UIPadding")
+buttomframeuipadding.PaddingTop = UDim.new(0, 65)
+buttomframeuipadding.PaddingBottom = UDim.new(0, 50)
+buttomframeuipadding.PaddingLeft = UDim.new(0, 25)
+buttomframeuipadding.PaddingRight = UDim.new(0, 25)
+buttomframeuipadding.Parent = buttonframe
+
+local title = Instance.new("TextLabel")
+title.Position = UDim2.new(0.4, 25,0, 25)
+title.AnchorPoint = Vector2.new(0.5, 0.5)
+title.Size = UDim2.new(0, 450,0, 50)
+title.BackgroundTransparency = 1
+title.Text = " Emma's Cheat Panel🍉"
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.FredokaOne
+title.TextScaled = true
+title.Parent = mainframe
+
+local noclipbutton = Instance.new("TextButton")
+noclipbutton.BorderSizePixel = 0
+noclipbutton.LayoutOrder = 1
+noclipbutton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+noclipbutton.Parent = buttonframe
+
+local infjumpbutton = Instance.new("TextButton")
+infjumpbutton.BorderSizePixel = 0
+infjumpbutton.LayoutOrder = 2
+infjumpbutton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+infjumpbutton.Parent = buttonframe
+
+local explorbutton = Instance.new("TextButton")
+explorbutton.BorderSizePixel = 0
+explorbutton.LayoutOrder = 3
+explorbutton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+explorbutton.Parent = buttonframe
+
+local titleuistroke = Instance.new("UIStroke")
+titleuistroke.Color = Color3.fromRGB(0, 0, 0)
+titleuistroke.Thickness = 5
+titleuistroke.Parent = title
+
+local framebar = Instance.new("Frame")
+framebar.BackgroundTransparency = 1
+framebar.BorderSizePixel = 0
+framebar.Size = UDim2.new(1, 0,0, 50)
+framebar.AnchorPoint = Vector2.new(0.5, 0.5)
+framebar.Position = UDim2.new(0.5, 0,0, 0)
+framebar.Parent = mainframe
+
+local buttonuicorner = Instance.new("UICorner")
+buttonuicorner.Parent = exitbutton
+
+local button2uicorner = Instance.new("UICorner")
+button2uicorner.Parent = minimizebutton
+
+local button3uicorner = Instance.new("UICorner")
+button3uicorner.Parent = openpanelbutton
+
+local buttonuiaspectratioconstraint = Instance.new("UIAspectRatioConstraint")
+buttonuiaspectratioconstraint.AspectRatio = 1
+buttonuiaspectratioconstraint.Parent = exitbutton
+
+--[[local mainscrollingframe = Instance.new("ScrollingFrame")
+mainscrollingframe.Position = UDim2.new(0.5, 0, 0.5, 0)
+mainscrollingframe.AnchorPoint = Vector2.new(0.5, 0.5)
+mainscrollingframe.Size = UDim2.new(1, 0,1, 0)
+mainscrollingframe.BorderSizePixel = 0
+mainscrollingframe.BackgroundTransparency = 1
+mainscrollingframe.Parent = mainframe
+]]
+
+exitbutton.MouseButton1Click:Connect(function()
+	maingui:Destroy()
+end)
+
+minimizebutton.MouseButton1Click:Connect(function()
+	mainframe.Visible = false
+	openpanelbutton.Visible = true
+end)
+
+
+openpanelbutton.MouseButton1Click:Connect(function()
+	mainframe.Visible = true
+	openpanelbutton.Visible = false
+end)
+
+local function toggleNoclip()
+	noclipEnabled = not noclipEnabled
+	if noclipEnabled then
+	end
+end
+
+local function toggleInfJump()
+	infJumpEnabled = not infJumpEnabled
+	if infJumpEnabled then
+	end
+end
+
+noclipbutton.MouseButton1Click:Connect(function()
+	noclipEnabled = not noclipEnabled
+	noclipbutton.Text = noclipEnabled and "Noclip: ON" or "Noclip: OFF"
+end)
+
+infjumpbutton.MouseButton1Click:Connect(function()
+	infJumpEnabled = not infJumpEnabled
+	infjumpbutton.Text = infJumpEnabled and "InfJump: ON" or "InfJump: OFF"
+end)
+
+RunService.Stepped:Connect(function()
+	if player.Character then
+		for _, part in pairs(player.Character:GetDescendants()) do
+			if part:IsA("BasePart") then
+				if part.Name == "HumanoidRootPart" then
+					part.CanCollide = false -- always off
+				else
+					part.CanCollide = not noclipEnabled
+				end
+			end
+		end
+	end
+end)
+
+UserInputService.JumpRequest:Connect(function()
+	if infJumpEnabled and player.Character then
+		local humanoid = player.Character:FindFirstChildWhichIsA("Humanoid")
+		if humanoid then
+			humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		end
+	end
+end)
+
+local dragging = false
+local dragInput, dragStart, startPos
+
+local function update(input)
+	local delta = input.Position - dragStart
+	mainframe.Position = UDim2.new(
+		startPos.X.Scale,
+		startPos.X.Offset + delta.X,
+		startPos.Y.Scale,
+		startPos.Y.Offset + delta.Y
+	)
+end
+
+framebar.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = mainframe.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+mainframe.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and input == dragInput then
+		update(input)
+	end
+end)
+
+local function moveTo(targetPos)
+	local startPos = hrp.Position
+	local direction = (targetPos - startPos).Unit
+	local distance = (targetPos - startPos).Magnitude
+	local travelTime = distance / travelSpeed
+	local elapsed = 0
+
+	while elapsed < travelTime and exploring do
+		local dt = RunService.Heartbeat:Wait()
+		elapsed += dt
+		local progress = math.clamp(elapsed / travelTime, 0, 1)
+		hrp.CFrame = CFrame.new(startPos:Lerp(targetPos, progress))
+	end
+end
+
+local function exploreMap()
+	if exploring then return end
+	exploring = true
+	explorbutton.Text = "Exploring..."
+
+	local minX, maxX = -1250, 1250
+	local minZ, maxZ = -1250, 1250
+	local z = minZ
+	local direction = 1
+
+	while exploring and z <= maxZ do
+		if direction == 1 then
+			moveTo(Vector3.new(maxX, hrp.Position.Y, z))
+		else
+			moveTo(Vector3.new(minX, hrp.Position.Y, z))
+		end
+
+		z += stepSize
+		direction = -direction
+	end
+
+	exploring = false
+	explorbutton.Text = "Explore Map"
+
+	local mainfire = workspace:FindFirstChild("Map") and workspace.Map:FindFirstChild("Campground") and workspace.Map.Campground:FindFirstChild("Mainfire")
+	if mainfire and mainfire:IsA("Model") and mainfire.PrimaryPart then
+		local firePos = mainfire.PrimaryPart.Position
+		hrp.CFrame = CFrame.new(firePos + Vector3.new(0, 50, 0))
+	elseif mainfire and mainfire:IsA("Model") then
+		local firePos = mainfire:GetPivot().Position
+		hrp.CFrame = CFrame.new(firePos + Vector3.new(0, 50, 0))
+	else
+		warn("Mainfire not found in Map.Campground")
+	end
+end
+
+explorbutton.MouseButton1Click:Connect(exploreMap)
